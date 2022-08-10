@@ -3,6 +3,7 @@ package com.xm.accounting.service;
 import com.xm.accounting.entity.Currency;
 import com.xm.accounting.entity.CurrencyRate;
 import com.xm.accounting.entity.Salary;
+import com.xm.accounting.exception.HistoryRateNotFoundException;
 import com.xm.accounting.parser.CurrencyRateParser;
 import com.xm.accounting.repository.CurrencyRateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
         Optional<CurrencyRate> currencyRate = rateRepository.findFirstRate(salaryDate, from.toString(), to.toString());
 
         return currencyRate.orElseThrow(() -> {
-            throw new RuntimeException("The salary rate is absent");
+            throw new HistoryRateNotFoundException("The salary rate is absent");
         }).getRate();
     }
 

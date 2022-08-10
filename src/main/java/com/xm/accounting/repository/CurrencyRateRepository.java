@@ -1,6 +1,5 @@
 package com.xm.accounting.repository;
 
-import com.xm.accounting.entity.Currency;
 import com.xm.accounting.entity.CurrencyRate;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

@@ -1,7 +1,5 @@
 package com.xm.accounting.dto;
 
-import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvIgnore;
 import com.xm.accounting.entity.Currency;
 
 import java.math.BigDecimal;

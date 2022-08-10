@@ -19,7 +19,6 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 public class SalaryParserImpl implements SalaryParser {
     private final Logger logger = LogManager.getLogger(SalaryParserImpl.class);
@@ -116,14 +115,14 @@ public class SalaryParserImpl implements SalaryParser {
                         salary.getMoney().setCurrency(Currency.USD);
                         salary.setSalaryDate(LocalDate.of(year, month.getValue(), SALARY_DATE));
                     })
-                    .collect(Collectors.toList());
+                    .toList();
 
             reader.close();
 
             Files.move(file.toPath(), file.toPath().resolveSibling("+" + file.getName()),
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            logger.error("Couldn't find file: " + path);
+            logger.error(String.format("Couldn't find file: %s", path));
         }
 
         return salaries;

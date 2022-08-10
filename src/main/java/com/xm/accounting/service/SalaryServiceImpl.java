@@ -5,9 +5,7 @@ import com.xm.accounting.entity.Salary;
 import com.xm.accounting.entity.SalaryStat;
 import com.xm.accounting.parser.SalaryParser;
 import com.xm.accounting.repository.SalaryRepository;
-import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections4.IterableUtils;
-import org.modelmapper.internal.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +17,7 @@ import java.util.Optional;
 
 @Service
 public class SalaryServiceImpl implements SalaryService {
-    private static final Integer SALARY_DAY = 7;
+
     @Autowired
     private CurrencyConversionService conversionService;
     @Autowired
