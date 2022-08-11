@@ -43,13 +43,11 @@ public class SalaryServiceTest {
         Mockito.when(salaryParser.isParseNeeded()).thenReturn(false);
         Mockito.doAnswer(answ -> {
             Salary salary = answ.getArgument(0);
-            salary.getMoney().setCurrency(Currency.GEL);
-            salary.getMoney().setAmount(salary.getMoney().getAmount().multiply(new BigDecimal(2)));
 
-            return null;
+            return new Money(salary.getMoney().getAmount().multiply(new BigDecimal(2) ), Currency.GEL);
         }).when(conversionService).convert(Mockito.any(Salary.class), Mockito.any(Currency.class));
 
-        SalaryStat salaryStat = salaryService.getSalaryStat();
+        SalaryStatistic salaryStat = salaryService.getSalaryStatistic();
 
         String expectedPeriod = "ALL";
         Assert.assertEquals(expectedPeriod, salaryStat.getPeriod());

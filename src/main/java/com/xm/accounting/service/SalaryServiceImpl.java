@@ -1,8 +1,9 @@
 package com.xm.accounting.service;
 
+import com.xm.accounting.dto.SortType;
 import com.xm.accounting.entity.Currency;
 import com.xm.accounting.entity.Salary;
-import com.xm.accounting.entity.SalaryStat;
+import com.xm.accounting.entity.SalaryStatistic;
 import com.xm.accounting.parser.SalaryParser;
 import com.xm.accounting.repository.SalaryRepository;
 import org.apache.commons.collections4.IterableUtils;
@@ -26,8 +27,8 @@ public class SalaryServiceImpl implements SalaryService {
     private SalaryRepository salaryRepository;
 
     @Override
-    public SalaryStat getSalaryStatByMonthAndYear(Month month, Integer year) {
-        SalaryStat salaryStat = new SalaryStat(month.name());
+    public SalaryStatistic getSalariesByMonthAndYear(Month month, Integer year, SortType sortType) {
+        SalaryStatistic salaryStatistic = new SalaryStatistic(month.name());
         List<Salary> salaries;
 
         if (salaryParser.isParseNeeded(month, year)) {
@@ -37,15 +38,17 @@ public class SalaryServiceImpl implements SalaryService {
 
         salaries = salaryRepository.findSalariesByMonthAndYear(month.getValue(), year);
 
-        salaries.forEach(salary -> conversionService.convert(salary, Currency.GEL));
-        salaryStat.setSalaries(salaries);
+        salaries.forEach(salary -> salary.setMoney(conversionService.convert(salary, Currency.GEL)));
+        salaryStatistic.setSalaries(salaries);
 
-        return salaryStat;
+        salaryStatistic.sort(sortType);
+
+        return salaryStatistic;
     }
 
     @Override
-    public SalaryStat getSalaryStat() {
-        SalaryStat salaryStat = new SalaryStat("ALL");
+    public SalaryStatistic getSalaryStatistic() {
+        SalaryStatistic salaryStatistic = new SalaryStatistic("ALL");
         List<Salary> salaries;
 
         if (salaryParser.isParseNeeded()) {
@@ -55,10 +58,10 @@ public class SalaryServiceImpl implements SalaryService {
 
         salaries = IterableUtils.toList(salaryRepository.findAll());
 
-        salaries.forEach(salary -> conversionService.convert(salary, Currency.GEL));
+        salaries.forEach(salary -> salary.setMoney(conversionService.convert(salary, Currency.GEL)));
         salaries = sumSalaryForEmpls(salaries);
-        salaryStat.setSalaries(salaries);
-        return salaryStat;
+        salaryStatistic.setSalaries(salaries);
+        return salaryStatistic;
     }
 
     private void saveSalaries(List<Salary> salaries) {
@@ -69,9 +72,12 @@ public class SalaryServiceImpl implements SalaryService {
         List<Salary> finalSalary = new ArrayList<>();
 
         salaries.forEach(salary -> {
-            Optional<Salary> matchedSalary = finalSalary.stream().filter(x -> Objects.equals(salary.getEmployee(), x.getEmployee())).findFirst();
-
-            matchedSalary.ifPresentOrElse(sal -> sal.getMoney().setAmount(sal.getMoney().getAmount().add(salary.getMoney().getAmount())), () -> finalSalary.add(salary));
+            Optional<Salary> matchedSalary = finalSalary
+                    .stream().filter(x -> Objects.equals(salary.getEmployee(), x.getEmployee())).findFirst();
+            matchedSalary
+                    .ifPresentOrElse(sal -> sal.getMoney()
+                            .setAmount(sal.getMoney().getAmount()
+                                    .add(salary.getMoney().getAmount())), () -> finalSalary.add(salary));
         });
 
         return finalSalary;

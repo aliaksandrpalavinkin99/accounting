@@ -2,6 +2,7 @@ package com.xm.accounting.service;
 
 import com.xm.accounting.entity.Currency;
 import com.xm.accounting.entity.CurrencyRate;
+import com.xm.accounting.entity.Money;
 import com.xm.accounting.entity.Salary;
 import com.xm.accounting.exception.HistoryRateNotFoundException;
 import com.xm.accounting.parser.CurrencyRateParser;
@@ -24,15 +25,14 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
     private CurrencyRateRepository rateRepository;
 
     @Override
-    public void convert(Salary salary, Currency to) {
+    public Money convert(Salary salary, Currency to) {
         if (Objects.equals(salary.getMoney().getCurrency(), to)) {
-            return;
+            return salary.getMoney();
         }
 
         BigDecimal rate = getSalaryRateByMonth(salary.getSalaryDate(), salary.getMoney().getCurrency(), to);
 
-        salary.getMoney().setCurrency(to);
-        salary.getMoney().setAmount(salary.getMoney().getAmount().multiply(rate));
+        return new Money(salary.getMoney().getAmount().multiply(rate), to);
     }
 
     private BigDecimal getSalaryRateByMonth(LocalDate salaryDate, Currency from, Currency to) {

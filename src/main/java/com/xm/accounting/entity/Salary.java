@@ -5,6 +5,7 @@ import com.opencsv.bean.CsvRecurse;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @javax.persistence.Entity
@@ -43,6 +44,10 @@ public class Salary extends Entity {
 
     public void setMoney(Money money) {
         this.money = money;
+    }
+
+    public BigDecimal getAmount() {
+        return this.money.getAmount();
     }
 
     public LocalDate getSalaryDate() {

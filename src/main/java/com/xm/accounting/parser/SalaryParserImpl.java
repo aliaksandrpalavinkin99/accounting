@@ -64,13 +64,12 @@ public class SalaryParserImpl implements SalaryParser {
                         salaries.addAll(new CsvToBeanBuilder<Salary>(reader)
                                 .withType(Salary.class)
                                 .build()
-                                .parse()
-                                .stream()
-                                .peek(salary -> {
-                                    salary.getMoney().setCurrency(Currency.USD);
-                                    salary.setSalaryDate(buildSalaryDate(file.getName()));
-                                })
-                                .toList());
+                                .parse());
+
+                        salaries.forEach(salary -> {
+                            salary.getMoney().setCurrency(Currency.USD);
+                            salary.setSalaryDate(buildSalaryDate(file.getName()));
+                        });
 
                         reader.close();
 
@@ -109,13 +108,12 @@ public class SalaryParserImpl implements SalaryParser {
             salaries = new CsvToBeanBuilder<Salary>(reader)
                     .withType(Salary.class)
                     .build()
-                    .parse()
-                    .stream()
-                    .peek(salary -> {
-                        salary.getMoney().setCurrency(Currency.USD);
-                        salary.setSalaryDate(LocalDate.of(year, month.getValue(), SALARY_DATE));
-                    })
-                    .toList();
+                    .parse();
+
+            salaries.forEach(salary -> {
+                salary.getMoney().setCurrency(Currency.USD);
+                salary.setSalaryDate(LocalDate.of(year, month.getValue(), SALARY_DATE));
+            });
 
             reader.close();
 

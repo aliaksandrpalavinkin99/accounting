@@ -2,7 +2,7 @@ package com.xm.accounting.dto;
 
 import java.util.List;
 
-public class SalaryStatDTO {
+public class SalaryStatisticDTO {
     private String period;
     private List<SalaryDTO> salaries;
 

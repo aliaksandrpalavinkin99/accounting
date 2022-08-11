@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface SalaryRepository extends CrudRepository<Salary, Long> {
 
-    @Query("SELECT s FROM Salary s WHERE month(s.salaryDate) = :month AND year(s.salaryDate) = :year")
+    @Query(value = "SELECT s FROM Salary s WHERE MONTH(s.salaryDate) = :month " +
+            "AND YEAR(s.salaryDate) = :year")
     List<Salary> findSalariesByMonthAndYear(@Param("month") int month, @Param("year") int year);
 }

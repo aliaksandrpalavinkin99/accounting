@@ -1,12 +1,15 @@
 package com.xm.accounting.entity;
 
+import com.xm.accounting.dto.SortType;
+
+import java.util.Comparator;
 import java.util.List;
 
-public class SalaryStat {
+public class SalaryStatistic {
     private String period;
     private List<Salary> salaries;
 
-    public SalaryStat(String period) {
+    public SalaryStatistic(String period) {
         this.period = period;
     }
 
@@ -24,5 +27,13 @@ public class SalaryStat {
 
     public void setSalaries(List<Salary> salaries) {
         this.salaries = salaries;
+    }
+
+    public void sort(SortType sortType) {
+        if (sortType.equals(SortType.DESC)) {
+            salaries.sort(Comparator.comparing(Salary::getAmount).reversed());
+        } else {
+            salaries.sort(Comparator.comparing(Salary::getAmount));
+        }
     }
 }

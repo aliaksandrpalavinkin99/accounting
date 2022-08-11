@@ -45,10 +45,10 @@ public class CurrencyConversionServiceTest {
                 .thenReturn(Optional.of(new CurrencyRate(LocalDate.of(2022,4, 7),
                 new BigDecimal("3.08"), Currency.USD, Currency.GEL)));
 
-        conversionService.convert(salary, Currency.GEL);
+        Money money = conversionService.convert(salary, Currency.GEL);
 
         BigDecimal expectedSalary = new BigDecimal("3080.00");
-        Assert.assertEquals(expectedSalary, salary.getMoney().getAmount());
+        Assert.assertEquals(expectedSalary, money.getAmount());
     }
 
     @Test
@@ -70,10 +70,10 @@ public class CurrencyConversionServiceTest {
         Mockito.when(rateRepository.findFirstRate(Mockito.any(LocalDate.class),
                 Mockito.any(String.class), Mockito.any(String.class))).thenReturn(Optional.of(rates.get(0)));
 
-        conversionService.convert(salary, Currency.GEL);
+        Money money = conversionService.convert(salary, Currency.GEL);
 
         BigDecimal expectedSalary = new BigDecimal(2000);
-        Assert.assertEquals(expectedSalary, salary.getMoney().getAmount());
+        Assert.assertEquals(expectedSalary, money.getAmount());
     }
 
     @Test

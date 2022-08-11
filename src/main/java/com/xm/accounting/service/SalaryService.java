@@ -1,14 +1,15 @@
 package com.xm.accounting.service;
 
-import com.xm.accounting.entity.SalaryStat;
+import com.xm.accounting.dto.SortType;
+import com.xm.accounting.entity.SalaryStatistic;
 
 import java.time.Month;
 
 public interface SalaryService {
 
-    SalaryStat getSalaryStatByMonthAndYear(Month month, Integer year);
+    SalaryStatistic getSalariesByMonthAndYear(Month month, Integer year, SortType sortType);
 
-    SalaryStat getSalaryStat();
+    SalaryStatistic getSalaryStatistic();
 
 
 }
